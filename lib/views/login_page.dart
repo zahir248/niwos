@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../controllers/login_page_controller.dart'; // Import your controller
+import '../controllers/login_page_controller.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key? key}) : super(key: key);
@@ -11,6 +11,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final LoginPageController _controller = LoginPageController();
+  final TextEditingController _usernameController = TextEditingController();
 
   bool _isFingerprintAuthenticating = false; // Track fingerprint authentication state
 
@@ -67,6 +68,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       const SizedBox(height: 5),
                       TextField(
+                        controller: _usernameController, // Assign the controller to the text field
                         readOnly: _isFingerprintAuthenticating, // Prevent keyboard when authenticating
                         style: TextStyle(color: Colors.grey),
                         decoration: InputDecoration(
@@ -93,13 +95,43 @@ class _LoginPageState extends State<LoginPage> {
                 child: Container(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
+                      // Get username from text field
+                      String username = _usernameController.text.trim();
+                      // Check if the username field is empty
+                      if (username.isEmpty) {
+                        // Display a message if the username field is empty
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Please enter username'),
+                            duration: Duration(seconds: 2),
+                            backgroundColor: Colors.grey[900],
+                          ),
+                        );
+                      } else if (!_isFingerprintAuthenticating) {
+                        // Only proceed if fingerprint authentication is not ongoing
+                        // Perform username checking
+                        bool usernameExists = await _controller.checkUsername(username);
+                        if (usernameExists) {
+                          await _controller.navigateToSecurityPicturePage(context);
+                        } else {
+                          // Username does not exist
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('Username does not exist'),
+                              duration: Duration(seconds: 2),
+                              backgroundColor: Colors.red[900],
+                            ),
+                          );
+                        }
+                      }
                     },
                     style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
                       padding: const EdgeInsets.all(16),
+                      backgroundColor: Color(0xFF004AAD), // Set button background color
                     ),
                     child: const Text(
                       'Login',
