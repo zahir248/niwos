@@ -1,20 +1,26 @@
 import 'package:flutter/material.dart';
 
-import '../controllers/splash_screen_controller.dart';
+import '../controllers/login_page_controller.dart'; // Import your controller
 
-class LoginPage extends StatelessWidget {
-  const LoginPage({Key? key}) : super(key: key);
+class LoginPage extends StatefulWidget {
+  LoginPage({Key? key}) : super(key: key);
+
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  final LoginPageController _controller = LoginPageController();
+
+  bool _isFingerprintAuthenticating = false; // Track fingerprint authentication state
 
   @override
   Widget build(BuildContext context) {
-    final SplashScreenController _splashScreenController =
-    SplashScreenController();
-
     return Scaffold(
-      backgroundColor: Colors.white, // Set background color to white
+      backgroundColor: Colors.white,
       body: Center(
         child: SingleChildScrollView(
-          physics: ClampingScrollPhysics(), // Prevent overscroll effect
+          physics: ClampingScrollPhysics(),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -34,11 +40,11 @@ class LoginPage extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const SizedBox(height: 200), // Add space between text and username field
+              const SizedBox(height: 200),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Container(
-                  width: double.infinity, // Set the width to match the parent's width
+                  width: double.infinity,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -61,16 +67,20 @@ class LoginPage extends StatelessWidget {
                       ),
                       const SizedBox(height: 5),
                       TextField(
-                        style: TextStyle(color: Colors.grey), // Set the text color to grey
+                        readOnly: _isFingerprintAuthenticating, // Prevent keyboard when authenticating
+                        style: TextStyle(color: Colors.grey),
                         decoration: InputDecoration(
-                          filled: true, // Set to true to fill the background
-                          fillColor: Colors.grey[200], // Specify the fill color
+                          filled: true,
+                          fillColor: Colors.grey[200],
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide.none, // Remove the border
+                            borderSide: BorderSide.none,
                           ),
                           contentPadding: const EdgeInsets.all(16),
-                          suffixIcon: Icon(Icons.fingerprint, size: 35), // Make the fingerprint icon bigger
+                          suffixIcon: InkWell(
+                            onTap: () => _authenticateWithFingerprint(context),
+                            child: Icon(Icons.fingerprint, size: 35),
+                          ),
                         ),
                       ),
                     ],
@@ -81,9 +91,9 @@ class LoginPage extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Container(
-                  width: double.infinity, // Set the width to match the parent's width
+                  width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () => _controller.authenticate(context),
                     style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
@@ -102,5 +112,17 @@ class LoginPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> _authenticateWithFingerprint(BuildContext context) async {
+    setState(() {
+      _isFingerprintAuthenticating = true; // Set fingerprint authentication state
+    });
+
+    await _controller.authenticate(context);
+
+    setState(() {
+      _isFingerprintAuthenticating = false; // Reset fingerprint authentication state
+    });
   }
 }
