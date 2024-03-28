@@ -93,7 +93,8 @@ class _LoginPageState extends State<LoginPage> {
                 child: Container(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () => _controller.authenticate(context),
+                    onPressed: () {
+                    },
                     style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
