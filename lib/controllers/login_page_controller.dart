@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '/views/dashboard_page.dart'; // Import the dashboard page
 import '/views/security_picture_page.dart'; // Import the security picture page
@@ -10,20 +11,43 @@ import '/main.dart'; // Import the main.dart to access AppConfig
 class LoginPageController {
   final LocalAuthentication _localAuthentication = LocalAuthentication();
 
-  Future<void> authenticate(BuildContext context) async {
+  Future<bool> authenticate(BuildContext context) async {
     try {
-      // Check if biometric authentication is available
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? username = prefs.getString('username');
+
+      if (username == null || username.isEmpty) {
+        // Show a dialog informing the user to login with their username and password first
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Login Required'),
+              content: Text('Please login with your username and password first.'),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('OK'),
+                ),
+              ],
+            );
+          },
+        );
+        return false;
+      }
+
       bool canCheckBiometrics = await _localAuthentication.canCheckBiometrics;
 
       if (!canCheckBiometrics) {
         // Biometric authentication is not available on this device
         // Handle this case accordingly
-        return;
+        return false;
       }
 
-      // Authenticate with biometrics
       bool authenticated = await _localAuthentication.authenticate(
-        localizedReason: 'Authenticate to login', // Reason for authentication
+        localizedReason: 'Touch the fingerprint sensor',
       );
 
       if (authenticated) {
@@ -32,10 +56,15 @@ class LoginPageController {
           context,
           MaterialPageRoute(builder: (context) => DashboardPage()),
         );
+        // Return true if authentication is successful
+        return true;
       }
+
+      // Return false if authentication fails
+      return false;
     } catch (e) {
-      // Handle authentication errors
       print('Authentication failed: $e');
+      return false;
     }
   }
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../controllers/login_page_controller.dart';
 
@@ -14,6 +15,12 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _usernameController = TextEditingController();
 
   bool _isFingerprintAuthenticating = false; // Track fingerprint authentication state
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUsernameFromPrefs(); // Load username from SharedPreferences when the widget initializes
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,8 +75,8 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       const SizedBox(height: 5),
                       TextField(
-                        controller: _usernameController, // Assign the controller to the text field
-                        readOnly: _isFingerprintAuthenticating, // Prevent keyboard when authenticating
+                        controller: _usernameController,
+                        readOnly: _isFingerprintAuthenticating,
                         style: TextStyle(color: Colors.grey),
                         decoration: InputDecoration(
                           filled: true,
@@ -96,11 +103,8 @@ class _LoginPageState extends State<LoginPage> {
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () async {
-                      // Get username from text field
                       String username = _usernameController.text.trim();
-                      // Check if the username field is empty
                       if (username.isEmpty) {
-                        // Display a message if the username field is empty
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             content: Text('Please enter username'),
@@ -109,13 +113,10 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         );
                       } else if (!_isFingerprintAuthenticating) {
-                        // Only proceed if fingerprint authentication is not ongoing
-                        // Perform username checking
                         bool usernameExists = await _controller.checkUsername(username);
                         if (usernameExists) {
-                          await _controller.navigateToSecurityPicturePage(context, username); // Pass the username here
+                          await _controller.navigateToSecurityPicturePage(context, username);
                         } else {
-                          // Username does not exist
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text('Username does not exist'),
@@ -131,7 +132,7 @@ class _LoginPageState extends State<LoginPage> {
                         borderRadius: BorderRadius.circular(8),
                       ),
                       padding: const EdgeInsets.all(16),
-                      backgroundColor: Color(0xFF004AAD), // Set button background color
+                      backgroundColor: Color(0xFF004AAD),
                     ),
                     child: const Text(
                       'Login',
@@ -149,13 +150,31 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<void> _authenticateWithFingerprint(BuildContext context) async {
     setState(() {
-      _isFingerprintAuthenticating = true; // Set fingerprint authentication state
+      _isFingerprintAuthenticating = true;
     });
 
-    await _controller.authenticate(context);
+    bool authenticated = await _controller.authenticate(context);
 
     setState(() {
-      _isFingerprintAuthenticating = false; // Reset fingerprint authentication state
+      _isFingerprintAuthenticating = false;
     });
+
+    if (authenticated) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Login Successful'),
+          duration: Duration(seconds: 2),
+          backgroundColor: Colors.green[900],
+        ),
+      );
+    }
+  }
+
+  Future<void> _loadUsernameFromPrefs() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? username = prefs.getString('username');
+    if (username != null && username.isNotEmpty) {
+      _usernameController.text = username;
+    }
   }
 }
