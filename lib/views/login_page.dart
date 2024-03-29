@@ -113,7 +113,7 @@ class _LoginPageState extends State<LoginPage> {
                         // Perform username checking
                         bool usernameExists = await _controller.checkUsername(username);
                         if (usernameExists) {
-                          await _controller.navigateToSecurityPicturePage(context);
+                          await _controller.navigateToSecurityPicturePage(context, username); // Pass the username here
                         } else {
                           // Username does not exist
                           ScaffoldMessenger.of(context).showSnackBar(

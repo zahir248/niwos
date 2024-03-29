@@ -22,4 +22,5 @@ class AppConfig {
   static final String baseIpAddress = "10.200.114.31";
 
   static const String checkUsernamePath = '/niwos_api/check_username.php';
+  static const String securityPicturePath = '/niwos_api/get_picture.php';
 }

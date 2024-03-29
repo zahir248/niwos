@@ -63,11 +63,11 @@ class LoginPageController {
     }
   }
 
-  Future<void> navigateToSecurityPicturePage(BuildContext context) async {
+  Future<void> navigateToSecurityPicturePage(BuildContext context, String username) async {
     try {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => SecurityPicturePage()),
+        MaterialPageRoute(builder: (context) => SecurityPicturePage(username: username)),
       );
     } catch (e) {
       print('Navigation to security picture page failed: $e');
