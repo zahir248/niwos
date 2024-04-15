@@ -55,10 +55,10 @@ class DashboardController {
     );
 
     if (response.statusCode == 200) {
-      print('Response body: ${response.body}');
+      //print('Response body: ${response.body}');
 
       final userData = json.decode(response.body);
-      print('Parsed user data: $userData');
+      //print('Parsed user data: $userData');
 
       return User.fromJson(userData);
     } else {
