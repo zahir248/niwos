@@ -95,7 +95,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   fit: BoxFit.cover,
                 )
                     : DecorationImage(
-                  image: AssetImage('assets/niwos.png'), // Provide a placeholder image
+                  image: AssetImage('assets/default.jpg'), // Provide a placeholder image
                   fit: BoxFit.cover,
                 ),
               ),
@@ -326,7 +326,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       fit: BoxFit.cover,
                     )
                         : DecorationImage(
-                      image: AssetImage('assets/niwos.png'), // Provide a placeholder image
+                      image: AssetImage('assets/default.jpg'), // Provide a placeholder image
                       fit: BoxFit.cover,
                     ),
                   ),
