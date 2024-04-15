@@ -26,4 +26,5 @@ class AppConfig {
   static const String authenticateUserPath = '/niwos_api/authenticate_user.php';
   static const String getUserDataPath = '/niwos_api/get_user_data.php';
   static const String getUserProfileDataPath = '/niwos_api/get_user_profile_data.php';
+  static const String uploadImageProfilePath = '/niwos_api/upload_profile_image.php';
 }
