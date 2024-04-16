@@ -299,7 +299,7 @@ class _DashboardPageState extends State<DashboardPage> {
       ),
       drawer: Drawer(
         child: Container(
-          color: Colors.white, // Set the background color of the drawer
+          color: Color(0xFF004AAD), // Set the background color of the drawer
           child: ListView(
             padding: EdgeInsets.zero,
             children: <Widget>[
@@ -314,8 +314,11 @@ class _DashboardPageState extends State<DashboardPage> {
                 ),
               ),
               ListTile(
-                leading: Icon(Icons.home, color: Color(0xFF004AAD)), // Set the color of the icon
-                title: Text('Home'),
+                leading: Icon(Icons.home, color: Colors.white), // Set the color of the icon
+                title: Text('Home',
+                  style: TextStyle(
+                    color: Colors.white, // Set text color to white
+                  ),),
                 onTap: () {
                   // Close the drawer
                   Navigator.pop(context);
@@ -323,15 +326,21 @@ class _DashboardPageState extends State<DashboardPage> {
                 },
               ),
               ListTile(
-                leading: Icon(Icons.settings, color: Color(0xFF004AAD)), // Set the color of the icon
-                title: Text('Setting'),
+                leading: Icon(Icons.settings, color: Colors.white), // Set the color of the icon
+                title: Text('Setting',
+                  style: TextStyle(
+                    color: Colors.white, // Set text color to white
+                  ),),
                 onTap: () {
                   DashboardController.navigateToSettings(context); // Navigate to settings page
                 },
               ),
               ListTile(
-                leading: Icon(Icons.logout, color: Color(0xFF004AAD)), // Set the color of the icon
-                title: Text('Logout'),
+                leading: Icon(Icons.logout, color: Colors.white), // Set the color of the icon
+                title: Text('Logout',
+                  style: TextStyle(
+                    color: Colors.white, // Set text color to white
+                  ),),
                 onTap: () {
                   DashboardController.showLogoutConfirmationDialog(context);
                 },
