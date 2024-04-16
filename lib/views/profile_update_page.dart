@@ -136,25 +136,7 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
                   ),
                 ),
               ),
-              SizedBox(height: 20),
-              Card(
-                elevation: 4,
-                child: Padding(
-                  padding: EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Update Date of Birth',
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(height: 20),
-                      // Add your date of birth update widget here
-                      Placeholder(), // Placeholder for date of birth update widget
-                    ],
-                  ),
-                ),
-              ),
+              SizedBox(height: 1000),
             ],
           ),
         ),
