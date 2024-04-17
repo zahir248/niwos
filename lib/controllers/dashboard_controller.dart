@@ -11,6 +11,7 @@ import '/main.dart';
 class DashboardController {
   static void showLogoutConfirmationDialog(BuildContext context) {
     showDialog(
+      barrierDismissible: false, // Prevent dismissal by tapping outside
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
