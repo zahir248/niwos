@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '/models/attendance_tracking_page_model.dart';
+import '/controllers/attendance_tracking_page_controller.dart';
 
 class AttendanceTrackingPage extends StatefulWidget {
   @override
@@ -12,6 +11,8 @@ class AttendanceTrackingPage extends StatefulWidget {
 }
 
 class _AttendanceTrackingPageState extends State<AttendanceTrackingPage> {
+
+  final AttendanceController _attendanceController = AttendanceController();
 
   @override
   Widget build(BuildContext context) {
@@ -110,6 +111,10 @@ class _AttendanceTrackingPageState extends State<AttendanceTrackingPage> {
   ////////////// Punch In Process ////////////////
 
   bool _isPunchInScanning = false;
+
+  void _showPunchInDialog() {
+    _attendanceController.showPunchInDialog(context, _startPunchInNFCReading);
+  }
 
   void _startPunchInNFCReading() {
     setState(() {
@@ -248,8 +253,7 @@ class _AttendanceTrackingPageState extends State<AttendanceTrackingPage> {
                                 'SD#DevC0d3%trngTg2024!')
                                 ? () {
                               Navigator.pop(context); // Close the dialog
-                              _submitAttendanceIn(
-                                  tagDataList); // Submit attendance manually
+                              _attendanceController.submitAttendanceIn(context, tagDataList); // Call the method through the controller// Submit attendance manually
                             }
                                 : null,
                             // Set onPressed to null if tag data doesn't match
@@ -268,143 +272,12 @@ class _AttendanceTrackingPageState extends State<AttendanceTrackingPage> {
     });
   }
 
-  void _submitAttendanceIn(List<Map<String, dynamic>> tagDataList) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String username = prefs.getString('username') ?? '';
-
-    print('Sending username: $username'); // Debug line
-
-    for (var data in tagDataList) {
-      String dateTime = data['dateTime'];
-      String formattedDate = dateTime.split(' ')[0];
-      String formattedTime = '${dateTime.split(' ')[1]} ${dateTime.split(
-          ' ')[2]}';
-
-      // Prepare the data to be sent to PHP script
-      Map<String, dynamic> postData = {
-        'username': username,
-        'date': formattedDate,
-        'time': formattedTime,
-      };
-
-      // Send HTTP POST request to PHP script
-      var response = await http.post(
-        Uri.parse('http://10.200.116.53/niwos_api/submit_attendance_in.php'),
-        body: postData,
-      );
-
-      if (response.statusCode == 200) {
-        // Data successfully submitted to the database
-        print('Data submitted successfully.');
-
-        // Check if the response contains the message "Attendance record already exists for today"
-        if (response.body.contains(
-            "Attendance record already exists for today")) {
-          // Display dialog with the message
-          showDialog(
-            barrierDismissible: false, // Prevent dismissal by tapping outside
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: Text("Error!"),
-                content: Text("You already punched in for today."),
-                actions: [
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pop(context); // Close the dialog
-                    },
-                    child: Text("OK"),
-                  ),
-                ],
-              );
-            },
-          );
-        } else if (response.body.contains("Data inserted successfully")) {
-          // Display dialog indicating successful attendance record submission
-          showDialog(
-            barrierDismissible: false, // Prevent dismissal by tapping outside
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: Text("Success!"),
-                content: Text("Attendance record successfully taken."),
-                actions: [
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pop(context); // Close the dialog
-                    },
-                    child: Text("OK"),
-                  ),
-                ],
-              );
-            },
-          );
-        }
-      } else {
-        // Error occurred
-        print('Error: ${response.reasonPhrase}');
-      }
-    }
-  }
-
-  void _showPunchInDialog() {
-    showDialog(
-      barrierDismissible: false, // Prevent dismissal by tapping outside
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text("Information!"),
-          content: Text("Make sure NFC is turned on in the phone. Tap your phone to the tag."),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context); // Close the dialog
-                _startPunchInNFCReading(); // Start NFC reading
-              },
-              child: Text("Ok"),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context); // Close the dialog
-              },
-              child: Text("Dismiss"),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   ////////////// Punch Out Process ////////////////
 
   bool _isPunchOutScanning = false;
 
   void _showPunchOutDialog() {
-    showDialog(
-      barrierDismissible: false, // Prevent dismissal by tapping outside
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text("Information!"),
-          content: Text("Make sure NFC is turned on in the phone. Tap your phone to the tag."),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context); // Close the dialog
-                _startPunchOutNFCReading(); // Start NFC reading
-              },
-              child: Text("Ok"),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context); // Close the dialog
-              },
-              child: Text("Dismiss"),
-            ),
-          ],
-        );
-      },
-    );
+    _attendanceController.showPunchOutDialog(context, _startPunchOutNFCReading);
   }
 
   void _startPunchOutNFCReading() {
@@ -544,8 +417,10 @@ class _AttendanceTrackingPageState extends State<AttendanceTrackingPage> {
                                 'SD#DevC0d3%trngTg2024!')
                                 ? () {
                               Navigator.pop(context); // Close the dialog
-                              _submitAttendanceOut(
-                                  tagDataList); // Submit attendance manually
+                              _attendanceController.submitAttendanceOut(
+                                  context,
+                                  tagDataList
+                              ); // Submit attendance manually
                             }
                                 : null,
                             // Set onPressed to null if tag data doesn't match
@@ -562,85 +437,6 @@ class _AttendanceTrackingPageState extends State<AttendanceTrackingPage> {
         },
       );
     });
-  }
-
-  void _submitAttendanceOut(List<Map<String, dynamic>> tagDataList) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String username = prefs.getString('username') ?? '';
-
-    print('Sending username: $username'); // Debug line
-
-    for (var data in tagDataList) {
-      String dateTime = data['dateTime'];
-      String formattedDate = dateTime.split(' ')[0];
-      String formattedTime = '${dateTime.split(' ')[1]} ${dateTime.split(
-          ' ')[2]}';
-
-      // Prepare the data to be sent to PHP script
-      Map<String, dynamic> postData = {
-        'username': username,
-        'date': formattedDate,
-        'time': formattedTime,
-      };
-
-      // Send HTTP POST request to PHP script
-      var response = await http.post(
-        Uri.parse('http://10.200.116.53/niwos_api/submit_attendance_out.php'),
-        body: postData,
-      );
-
-      if (response.statusCode == 200) {
-        // Data successfully submitted to the database
-        print('Data submitted successfully.');
-
-        // Check if the response contains the message "Attendance record already exists for today"
-        if (response.body.contains(
-            "Attendance record already exists for today")) {
-          // Display dialog with the message
-          showDialog(
-            barrierDismissible: false, // Prevent dismissal by tapping outside
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: Text("Error!"),
-                content: Text("You already punched out for today."),
-                actions: [
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pop(context); // Close the dialog
-                    },
-                    child: Text("OK"),
-                  ),
-                ],
-              );
-            },
-          );
-        } else if (response.body.contains("Data inserted successfully")) {
-          // Display dialog indicating successful attendance record submission
-          showDialog(
-            barrierDismissible: false, // Prevent dismissal by tapping outside
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: Text("Success!"),
-                content: Text("Attendance record successfully taken."),
-                actions: [
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pop(context); // Close the dialog
-                    },
-                    child: Text("OK"),
-                  ),
-                ],
-              );
-            },
-          );
-        }
-      } else {
-        // Error occurred
-        print('Error: ${response.reasonPhrase}');
-      }
-    }
   }
 }
 
