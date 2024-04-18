@@ -54,7 +54,7 @@ class _AttendanceHistoryPageState extends State<AttendanceHistoryPage> {
           children: [
             ListTile(
               contentPadding: EdgeInsets.all(16),
-              tileColor: Colors.blue, // Set the background color of the header
+              tileColor: Color(0xFF004AAD), // Set the background color of the header
               title: Center(
                 child: Text(
                   'Date: $date', // Place the date here in the title
