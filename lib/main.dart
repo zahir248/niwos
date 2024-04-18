@@ -31,4 +31,5 @@ class AppConfig {
   static const String submitAttendanceOutPath = '/niwos_api/submit_attendance_out.php';
   static const String retrieveAttendanceHistoryPath = '/niwos_api/retrieve_attendance_history.php';
   static const String submitLeaveRequestPath = '/niwos_api/submit_leave_request.php';
+  static const String retrieveLeaveHistoryPath = '/niwos_api/retrieve_leave_history.php';
 }

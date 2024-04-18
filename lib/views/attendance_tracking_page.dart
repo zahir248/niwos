@@ -25,7 +25,8 @@ class _AttendanceTrackingPageState extends State<AttendanceTrackingPage> {
         title: Text('Attendance Tracking'),
       ),
       backgroundColor: Colors.grey[350],
-      body: Column(
+      body: SingleChildScrollView(
+        child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Padding(
@@ -204,6 +205,7 @@ class _AttendanceTrackingPageState extends State<AttendanceTrackingPage> {
           SizedBox(height: 20),
         ],
       ),
+      )
     );
   }
 
