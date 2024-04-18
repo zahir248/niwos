@@ -29,4 +29,5 @@ class AppConfig {
   static const String uploadImageProfilePath = '/niwos_api/upload_profile_image.php';
   static const String submitAttendanceInPath = '/niwos_api/submit_attendance_in.php';
   static const String submitAttendanceOutPath = '/niwos_api/submit_attendance_out.php';
+  static const String retrieveAttendanceHistoryPath = '/niwos_api/retrieve_attendance_history.php';
 }

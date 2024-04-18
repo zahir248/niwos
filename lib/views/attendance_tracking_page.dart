@@ -3,6 +3,9 @@ import 'package:intl/intl.dart';
 
 import '/models/attendance_tracking_page_model.dart';
 import '/controllers/attendance_tracking_page_controller.dart';
+import '/views/attendance_history_page.dart';
+import '/views/leave_history_page.dart';
+import '/views/leave_request_page.dart';
 
 class AttendanceTrackingPage extends StatefulWidget {
   @override
@@ -103,6 +106,102 @@ class _AttendanceTrackingPageState extends State<AttendanceTrackingPage> {
               ),
             ),
           ),
+          SizedBox(height: 20),
+          Padding(
+            padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+              ),
+              child: Column(
+                children: [
+                  SizedBox(height: 50),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => AttendanceHistoryPage()),
+                      );
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "View Attendance History",
+                          style: TextStyle(
+                            color: Color(0xFF004AAD),
+                            fontSize: 15, // Adjust the font size as needed
+                          ),
+                        ),
+                        SizedBox(width: 10), // Add space between text and icon
+                        Icon(
+                          Icons.arrow_forward_ios, // Icon for navigating forward
+                          color: Color(0xFF004AAD),
+                          size: 15, // Adjust the icon size as needed
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 50),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => SubmitLeaveRequestPage()),
+                      );
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Submit Leave Request",
+                          style: TextStyle(
+                            color: Color(0xFF004AAD),
+                            fontSize: 15, // Adjust the font size as needed
+                          ),
+                        ),
+                        SizedBox(width: 10), // Add space between text and icon
+                        Icon(
+                          Icons.arrow_forward_ios, // Icon for navigating forward
+                          color: Color(0xFF004AAD),
+                          size: 15, // Adjust the icon size as needed
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 50),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => ViewLeaveRequestHistoryPage()),
+                      );
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "View Leave Request History",
+                          style: TextStyle(
+                            color: Color(0xFF004AAD),
+                            fontSize: 15, // Adjust the font size as needed
+                          ),
+                        ),
+                        SizedBox(width: 8), // Add space between text and icon
+                        Icon(
+                          Icons.arrow_forward_ios, // Icon for navigating forward
+                          color: Color(0xFF004AAD),
+                          size: 15, // Adjust the icon size as needed
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 50),
+                ],
+              ),
+            ),
+          ),
+          SizedBox(height: 20),
         ],
       ),
     );
