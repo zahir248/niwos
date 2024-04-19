@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '/controllers/attendance_history_page_controller.dart';
 
@@ -22,9 +23,9 @@ class _AttendanceHistoryPageState extends State<AttendanceHistoryPage> {
   Widget build(BuildContext context) {
     // Filter attendance data if a date is selected
     List<dynamic> filteredAttendanceData = selectedDate != null
-        ? attendanceData
-        .where((attendance) =>
-        attendance['AttendanceDate'].startsWith(selectedDate!.toString().split(' ')[0]))
+        ? attendanceData.where((attendance) =>
+    attendance['AttendanceDate'] ==
+        DateFormat('EEEE, d MMMM yyyy').format(selectedDate!))
         .toList()
         : attendanceData;
 
@@ -45,7 +46,7 @@ class _AttendanceHistoryPageState extends State<AttendanceHistoryPage> {
       String date = entry.key;
       List<dynamic> attendanceRecords = entry.value;
 
-      // Create a ListTile for each date group
+      // Create a ListTile for each attendance record within the date group
       return Card(
         elevation: 3,
         margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
@@ -53,101 +54,57 @@ class _AttendanceHistoryPageState extends State<AttendanceHistoryPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ListTile(
-              contentPadding: EdgeInsets.all(16),
+              contentPadding: EdgeInsets.symmetric(horizontal: 8), // Adjust padding here
               tileColor: Color(0xFF004AAD), // Set the background color of the header
               title: Center(
                 child: Text(
-                  'Date: $date', // Place the date here in the title
-                  style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 18),
+                  '$date', // Place the date here in the title
+                  style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 16), // Adjust font size here
                   textAlign: TextAlign.center,
                 ),
               ),
             ),
-            // Create a ListTile for each attendance record within the date group
-            ...attendanceRecords.map((attendance) {
-              // Create a ListTile for each attendance record within the date group
-              return ListTile(
-                contentPadding: EdgeInsets.all(16),
-                tileColor: Colors.white,
-                title: Center(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      // Display Session with icon
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.access_time_filled,
-                            size: 18,
-                            color: attendance['Session'] == 'Out'
-                                ? Colors.red
-                                : Colors.green,
+            // Display the attendance records in a DataTable
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: DataTable(
+                columns: [
+                  DataColumn(label: Text('Session')),
+                  DataColumn(label: Text('Time')),
+                  DataColumn(label: Text('Status')),
+                ],
+                rows: attendanceRecords.map<DataRow>((attendance) {
+                  return DataRow(
+                    cells: [
+                      DataCell(Text('${attendance['Session']}')),
+                      DataCell(Text(
+                          attendance['Session'] == 'In'
+                              ? '${convertTo12HourFormat(attendance['PunchInTime']!)}'
+                              : '${convertTo12HourFormat(attendance['PunchOutTime']!)}'
+                      )),
+                      DataCell(
+                        Container(
+                          width: 90, // Adjust the width as needed
+                          height: 30, // Adjust the height as needed
+                          decoration: BoxDecoration(
+                            color: getStatusColor(attendance['Status']), // Get color based on status
+                            shape: BoxShape.rectangle,
+                            borderRadius: BorderRadius.circular(4), // Adjust border radius as needed
                           ),
-                          SizedBox(width: 4),
-                          Text(
-                            'Session: ',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                            '${attendance['Session']}',
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
-                      ),
-                      // Display Punch In Time if session is 'In'
-                      if (attendance['Session'] == 'In' &&
-                          attendance['PunchInTime'] != null)
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SizedBox(width: 4),
-                            Text(
-                              'Punch In: ',
-                              style: TextStyle(fontWeight: FontWeight.bold),
+                          child: Center(
+                            child: Text(
+                              attendance['Status'],
+                              style: TextStyle(color: Colors.white, fontSize: 11,
+                              ), // Text color
                             ),
-                            Text(
-                              '${convertTo12HourFormat(attendance['PunchInTime'])}',
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
+                          ),
                         ),
-                      // Display Punch Out Time if session is 'Out'
-                      if (attendance['Session'] == 'Out' &&
-                          attendance['PunchOutTime'] != null)
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SizedBox(width: 4),
-                            Text(
-                              'Punch Out: ',
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                            Text(
-                              '${convertTo12HourFormat(attendance['PunchOutTime'])}',
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
-                        ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SizedBox(width: 4),
-                          Text(
-                            'Status: ',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                            '${attendance['Status']}',
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            }).toList(),
+                      ), // Close DataCell here
+                    ], // Close cells list here
+                  );
+                }).toList(),
+              ),
+            ),
           ],
         ),
       );
@@ -201,6 +158,12 @@ class _AttendanceHistoryPageState extends State<AttendanceHistoryPage> {
       if (username != null && username.isNotEmpty) {
         final List<dynamic> data = await _controller.fetchAttendanceData(username);
         data.sort((a, b) => b['AttendanceDate'].compareTo(a['AttendanceDate']));
+
+        // Format the dates in the data list
+        data.forEach((attendance) {
+          attendance['AttendanceDate'] = DateFormat('EEEE, d MMMM yyyy').format(DateTime.parse(attendance['AttendanceDate']));
+        });
+
         setState(() {
           attendanceData = data;
         });
@@ -216,11 +179,11 @@ class _AttendanceHistoryPageState extends State<AttendanceHistoryPage> {
   String convertTo12HourFormat(String time) {
     List<String> parts = time.split(':');
     int hour = int.parse(parts[0]);
-    String minutes = parts[1];
+    int minutes = int.parse(parts[1]);
 
-    String period = 'a.m.';
+    String period = 'AM';
     if (hour >= 12) {
-      period = 'p.m.';
+      period = 'PM';
       if (hour > 12) {
         hour -= 12;
       }
@@ -228,7 +191,7 @@ class _AttendanceHistoryPageState extends State<AttendanceHistoryPage> {
     if (hour == 0) {
       hour = 12;
     }
-    return '$hour:$minutes $period';
+    return '$hour:${minutes.toString().padLeft(2, '0')} $period';
   }
 
   Future<void> _selectDate() async {
@@ -242,6 +205,19 @@ class _AttendanceHistoryPageState extends State<AttendanceHistoryPage> {
       setState(() {
         selectedDate = picked;
       });
+    }
+  }
+
+  Color getStatusColor(String status) {
+    switch (status.toLowerCase()) {
+      case 'late':
+        return Colors.red.shade900;
+      case 'on time':
+        return Colors.green.shade900;
+      case 'too early':
+        return Colors.yellow.shade900;
+      default:
+        return Colors.grey.shade900;
     }
   }
 }
