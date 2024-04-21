@@ -3,6 +3,7 @@ import 'dart:async';
 
 import '/models/access_control_page_model.dart';
 import '/controllers/access_control_page_controller.dart';
+import '/views/access_request_page.dart';
 
 class AccessControlPage extends StatefulWidget {
   @override
@@ -74,6 +75,73 @@ class _AccessControlPageState extends State<AccessControlPage> {
               ),
             ),
             SizedBox(height: 20),
+            Padding(
+              padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                ),
+                child: Column(
+                  children: [
+                    SizedBox(height: 50),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => SubmitAccessRequestPage()),
+                        );
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Submit Access Request",
+                            style: TextStyle(
+                              color: Color(0xFF004AAD),
+                              fontSize: 15, // Adjust the font size as needed
+                            ),
+                          ),
+                          SizedBox(width: 10), // Add space between text and icon
+                          Icon(
+                            Icons.arrow_forward_ios, // Icon for navigating forward
+                            color: Color(0xFF004AAD),
+                            size: 15, // Adjust the icon size as needed
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 50),
+                    GestureDetector(
+                      onTap: () {
+                        /*Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => ViewLeaveRequestHistoryPage()),
+                        );*/
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "View Access Request History",
+                            style: TextStyle(
+                              color: Color(0xFF004AAD),
+                              fontSize: 15, // Adjust the font size as needed
+                            ),
+                          ),
+                          SizedBox(width: 8), // Add space between text and icon
+                          Icon(
+                            Icons.arrow_forward_ios, // Icon for navigating forward
+                            color: Color(0xFF004AAD),
+                            size: 15, // Adjust the icon size as needed
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 50),
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
       ),
@@ -141,7 +209,7 @@ class _AccessControlPageState extends State<AccessControlPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Access Granted"),
+          title: Text("Access Granted!"),
           content: Text("You have access to this area."),
           actions: <Widget>[
             TextButton(
@@ -165,7 +233,7 @@ class _AccessControlPageState extends State<AccessControlPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Access Denied"),
+          title: Text("Access Denied!"),
           content: Text("You do not have access to this area."),
           actions: <Widget>[
             TextButton(
