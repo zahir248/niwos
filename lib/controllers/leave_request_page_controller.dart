@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-import'/models/leave_request_page_model.dart';
+import '/models/leave_request_page_model.dart';
 import '/main.dart';
 
 class SubmitLeaveRequestController {
@@ -52,10 +52,6 @@ class SubmitLeaveRequestController {
     Uri url = Uri.parse('http://${AppConfig.baseIpAddress}${AppConfig.submitLeaveRequestPath}');
     var response = await http.post(url, body: formData);
 
-    // Debug line: print response status code and body
-    //print('Response status: ${response.statusCode}');
-    //print('Response body: ${response.body}');
-
     // Handle response
     if (response.statusCode == 200) {
       /// Show success message
@@ -79,19 +75,34 @@ class SubmitLeaveRequestController {
     }
   }
 
-  Future<void> selectDate(BuildContext context, bool isStartDate) async {
-    final DateTime? picked = await showDatePicker(
+  void selectDate(BuildContext context, bool isStartDate) async {
+    // Present date picker
+    final DateTime? pickedDate = await showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime.now().subtract(Duration(days: 365)),
-      lastDate: DateTime.now().add(Duration(days: 365)),
+      initialDate: isStartDate ? model.startDate.value ?? DateTime.now() : model.endDate.value ?? DateTime.now(),
+      firstDate: DateTime.now(),
+      lastDate: DateTime(DateTime.now().year + 1),
     );
-    if (picked != null) {
-      if (isStartDate) {
-        model.startDate.value = picked;
+
+    // Check if the picked date is not null and if it's an end date
+    if (pickedDate != null && !isStartDate) {
+      // Check if the picked end date is before the start date
+      if (model.startDate.value != null && pickedDate.isBefore(model.startDate.value!)) {
+        // Show an error message
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Invalid End Date'),
+            backgroundColor: Colors.red[900],
+            duration: Duration(seconds: 3),
+          ),
+        );
       } else {
-        model.endDate.value = picked;
+        // Update the end date if it's valid
+        model.endDate.value = pickedDate;
       }
+    } else if (pickedDate != null) {
+      // Update the start date if it's valid
+      model.startDate.value = pickedDate;
     }
   }
 }

@@ -6,6 +6,7 @@ import '/controllers/attendance_tracking_page_controller.dart';
 import '/views/attendance_history_page.dart';
 import '/views/leave_history_page.dart';
 import '/views/leave_request_page.dart';
+import '/views/cancel_leave_request_page.dart';
 
 class AttendanceTrackingPage extends StatefulWidget {
   @override
@@ -162,6 +163,33 @@ class _AttendanceTrackingPageState extends State<AttendanceTrackingPage> {
                           ),
                         ),
                         SizedBox(width: 10), // Add space between text and icon
+                        Icon(
+                          Icons.arrow_forward_ios, // Icon for navigating forward
+                          color: Color(0xFF004AAD),
+                          size: 15, // Adjust the icon size as needed
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 50),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => CancelLeaveRequestPage()),
+                      );
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Cancel Leave Request",
+                          style: TextStyle(
+                            color: Color(0xFF004AAD),
+                            fontSize: 15, // Adjust the font size as needed
+                          ),
+                        ),
+                        SizedBox(width: 8), // Add space between text and icon
                         Icon(
                           Icons.arrow_forward_ios, // Icon for navigating forward
                           color: Color(0xFF004AAD),
@@ -540,6 +568,3 @@ class _AttendanceTrackingPageState extends State<AttendanceTrackingPage> {
     });
   }
 }
-
-
-
