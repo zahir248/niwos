@@ -220,7 +220,7 @@ class _CancelLeaveRequestPageState extends State<CancelLeaveRequestPage> {
       if (isCancelled) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Your leave request has been successfully cancelled.'),
+            content: Text('Your leave request has been successfully cancelled'),
             duration: Duration(seconds: 3),
             backgroundColor: Colors.green[900],
           ),
