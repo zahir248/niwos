@@ -4,6 +4,7 @@ import 'dart:async';
 import '/models/access_control_page_model.dart';
 import '/controllers/access_control_page_controller.dart';
 import '/views/access_request_page.dart';
+import '/views/access_history_page.dart';
 
 class AccessControlPage extends StatefulWidget {
   @override
@@ -113,10 +114,10 @@ class _AccessControlPageState extends State<AccessControlPage> {
                     SizedBox(height: 50),
                     GestureDetector(
                       onTap: () {
-                        /*Navigator.push(
+                        Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => ViewLeaveRequestHistoryPage()),
-                        );*/
+                          MaterialPageRoute(builder: (context) => ViewAccessRequestHistoryPage()),
+                        );
                       },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,

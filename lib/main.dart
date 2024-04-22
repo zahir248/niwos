@@ -34,4 +34,5 @@ class AppConfig {
   static const String retrieveLeaveHistoryPath = '/niwos_api/retrieve_leave_history.php';
   static const String retrieveAccessCodePath = '/niwos_api/retrieve_access_code.php';
   static const String submitAccessRequestPath = '/niwos_api/submit_access_request.php';
+  static const String retrieveAccessHistoryPath = '/niwos_api/retrieve_access_history.php';
 }
