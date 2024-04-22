@@ -9,7 +9,8 @@ class CancelLeaveRequestPage extends StatefulWidget {
 }
 
 class _CancelLeaveRequestPageState extends State<CancelLeaveRequestPage> {
-  final CancelLeaveRequestController _controller = CancelLeaveRequestController();
+  final CancelLeaveRequestController _controller =
+  CancelLeaveRequestController();
   List<dynamic> pendingLeaveData = [];
 
   @override
@@ -57,10 +58,11 @@ class _CancelLeaveRequestPageState extends State<CancelLeaveRequestPage> {
 
           return Card(
             elevation: 3,
-            margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+            margin:
+            EdgeInsets.symmetric(vertical: 8, horizontal: 16),
             child: ListTile(
-              contentPadding:
-              EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+              contentPadding: EdgeInsets.symmetric(
+                  vertical: 16, horizontal: 20),
               title: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -134,7 +136,7 @@ class _CancelLeaveRequestPageState extends State<CancelLeaveRequestPage> {
                   SizedBox(height: 8),
                   ElevatedButton(
                     onPressed: () {
-                      _cancelLeaveRequest(leave);
+                      _cancelLeaveRequest(leave, context);
                     },
                     style: ButtonStyle(
                       minimumSize: MaterialStateProperty.all(
@@ -145,8 +147,7 @@ class _CancelLeaveRequestPageState extends State<CancelLeaveRequestPage> {
                           borderRadius: BorderRadius.circular(20),
                         ),
                       ),
-                      backgroundColor:
-                      MaterialStateProperty.all<Color>(
+                      backgroundColor: MaterialStateProperty.all<Color>(
                           Colors.red.shade900),
                     ),
                     child: Text('Cancel'),
@@ -174,17 +175,22 @@ class _CancelLeaveRequestPageState extends State<CancelLeaveRequestPage> {
         pendingLeaveData = data;
       });
     } catch (error) {
-      print(error);
+      if (error is FormatException) {
+        // Handle FormatException gracefully (optional)
+        // For example, you can display a custom error message to the user
+      } else {
+        print(error);
+      }
     }
   }
 
-  void _cancelLeaveRequest(Map<String, dynamic> leave) async {
+  void _cancelLeaveRequest(Map<String, dynamic> leave, BuildContext context) async {
     try {
       final leaveRequestId = leave['LeaveRequest_ID']; // Extract LeaveRequest_ID
       final requestData = {'LeaveRequest_ID': leaveRequestId}; // Prepare request data
 
       // Show confirmation dialog
-      showDialog(
+      final isCancelled = await showDialog(
         barrierDismissible: false, // Prevent dismissal by tapping outside
         context: context,
         builder: (BuildContext context) {
@@ -194,15 +200,15 @@ class _CancelLeaveRequestPageState extends State<CancelLeaveRequestPage> {
             actions: <Widget>[
               TextButton(
                 onPressed: () {
-                  Navigator.of(context).pop(); // Close the dialog
+                  Navigator.of(context).pop(false); // Close the dialog
                 },
                 child: Text('No'),
               ),
               TextButton(
-                onPressed: () {
+                onPressed: () async {
                   // Close the dialog and cancel the leave request
-                  Navigator.of(context).pop();
-                  _executeCancellation(requestData);
+                  Navigator.of(context).pop(true);
+                  await _executeCancellation(requestData, context);
                 },
                 child: Text('Yes'),
               ),
@@ -210,6 +216,16 @@ class _CancelLeaveRequestPageState extends State<CancelLeaveRequestPage> {
           );
         },
       );
+
+      if (isCancelled) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Your leave request has been successfully cancelled.'),
+            duration: Duration(seconds: 3),
+            backgroundColor: Colors.green[900],
+          ),
+        );
+      }
     } catch (error) {
       print(error);
       // Handle cancellation error, if any
@@ -217,30 +233,13 @@ class _CancelLeaveRequestPageState extends State<CancelLeaveRequestPage> {
   }
 
   // Method to execute the leave request cancellation
-  void _executeCancellation(Map<String, dynamic> requestData) async {
+  Future<void> _executeCancellation(Map<String, dynamic> requestData, BuildContext context) async {
     try {
       await _controller.cancelLeaveRequest(requestData);
       // Reload pending leave data after cancellation
       _loadPendingLeaveData();
-      // Optionally, show a confirmation dialog
-      showDialog(
-        barrierDismissible: false, // Prevent dismissal by tapping outside
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Success!'),
-            content: Text('Your leave request has been successfully cancelled.'),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: Text('OK'),
-              ),
-            ],
-          );
-        },
-      );
+      // Redirect to previous page
+      Navigator.of(context).pop();
     } catch (error) {
       print(error);
       // Handle cancellation error, if any

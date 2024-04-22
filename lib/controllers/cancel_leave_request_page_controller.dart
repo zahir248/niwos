@@ -14,7 +14,7 @@ class CancelLeaveRequestController {
       final response = await http.get(url);
 
       if (response.statusCode == 200) {
-        print('Response body: ${response.body}');
+        //print('Response body: ${response.body}');
         return jsonDecode(response.body);
       } else {
         throw Exception('Failed to load pending leave data');
