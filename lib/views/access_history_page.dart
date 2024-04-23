@@ -208,11 +208,13 @@ class _ViewAccessRequestHistoryPageState
   Color _getStatusColor(String status) {
     switch (status) {
       case 'Pending':
-        return Colors.yellow.shade900;
+        return Colors.yellow.shade700;
       case 'Approved':
         return Colors.green.shade900;
       case 'Rejected':
         return Colors.red.shade900;
+      case 'Cancelled':
+        return Colors.orange.shade900;
       default:
         return Colors.blue.shade900;
     }
@@ -232,7 +234,7 @@ class _ViewAccessRequestHistoryPageState
               });
               Navigator.of(context).pop(); // Close the dialog
             },
-            items: <String>['All', 'Pending', 'Approved', 'Rejected']
+            items: <String>['All', 'Pending', 'Approved', 'Rejected', 'Cancelled']
                 .map<DropdownMenuItem<String>>((String value) {
               return DropdownMenuItem<String>(
                 value: value,

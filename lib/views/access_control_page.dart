@@ -5,6 +5,7 @@ import '/models/access_control_page_model.dart';
 import '/controllers/access_control_page_controller.dart';
 import '/views/access_request_page.dart';
 import '/views/access_history_page.dart';
+import '/views/cancel_access_request_page.dart';
 
 class AccessControlPage extends StatefulWidget {
   @override
@@ -103,6 +104,33 @@ class _AccessControlPageState extends State<AccessControlPage> {
                             ),
                           ),
                           SizedBox(width: 10), // Add space between text and icon
+                          Icon(
+                            Icons.arrow_forward_ios, // Icon for navigating forward
+                            color: Color(0xFF004AAD),
+                            size: 15, // Adjust the icon size as needed
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 50),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => CancelAccessRequestPage()),
+                        );
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Cancel Access Request",
+                            style: TextStyle(
+                              color: Color(0xFF004AAD),
+                              fontSize: 15, // Adjust the font size as needed
+                            ),
+                          ),
+                          SizedBox(width: 8), // Add space between text and icon
                           Icon(
                             Icons.arrow_forward_ios, // Icon for navigating forward
                             color: Color(0xFF004AAD),
