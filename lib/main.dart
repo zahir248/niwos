@@ -39,4 +39,5 @@ class AppConfig {
   static const String updateCancelStatusLeaveRequestPath = '/niwos_api/update_cancel_status_leave_request.php';
   static const String retrievePendingAccessHistoryPath = '/niwos_api/retrieve_pending_access_history.php';
   static const String updateCancelStatusAccessRequestPath = '/niwos_api/update_cancel_status_access_request.php';
+  static const String retrieveAccessPermissionPath = '/niwos_api/retrieve_access_permission.php';
 }

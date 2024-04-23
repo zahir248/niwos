@@ -6,6 +6,7 @@ import '/controllers/access_control_page_controller.dart';
 import '/views/access_request_page.dart';
 import '/views/access_history_page.dart';
 import '/views/cancel_access_request_page.dart';
+import '/views/access_permission_page.dart';
 
 class AccessControlPage extends StatefulWidget {
   @override
@@ -85,6 +86,33 @@ class _AccessControlPageState extends State<AccessControlPage> {
                 ),
                 child: Column(
                   children: [
+                    SizedBox(height: 50),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => AccessPermissionPage()),
+                        );
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "View Access Permission",
+                            style: TextStyle(
+                              color: Color(0xFF004AAD),
+                              fontSize: 15, // Adjust the font size as needed
+                            ),
+                          ),
+                          SizedBox(width: 10), // Add space between text and icon
+                          Icon(
+                            Icons.arrow_forward_ios, // Icon for navigating forward
+                            color: Color(0xFF004AAD),
+                            size: 15, // Adjust the icon size as needed
+                          ),
+                        ],
+                      ),
+                    ),
                     SizedBox(height: 50),
                     GestureDetector(
                       onTap: () {
