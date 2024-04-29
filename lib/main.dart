@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
 }
 
 class AppConfig {
-  static final String baseIpAddress = "10.200.113.110";
+  static final String baseIpAddress = "192.168.0.109";
 
   static const String checkUsernamePath = '/niwos_api/check_username.php';
   static const String securityPicturePath = '/niwos_api/get_picture.php';
