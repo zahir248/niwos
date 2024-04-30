@@ -40,4 +40,6 @@ class AppConfig {
   static const String retrievePendingAccessHistoryPath = '/niwos_api/retrieve_pending_access_history.php';
   static const String updateCancelStatusAccessRequestPath = '/niwos_api/update_cancel_status_access_request.php';
   static const String retrieveAccessPermissionPath = '/niwos_api/retrieve_access_permission.php';
+  static const String walletInformationPath = '/niwos_api/retrieve_wallet_information.php';
+  static const String submitPaymentPath = '/niwos_api/submit_payment.php';
 }
