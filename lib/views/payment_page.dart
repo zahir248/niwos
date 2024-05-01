@@ -34,14 +34,15 @@ class _PaymentPageState extends State<PaymentPage> {
   @override
   Widget build(BuildContext context) {
     return ScaffoldMessenger(
-        key: PaymentPage.scaffoldMessengerKey,
-        child: Scaffold(
-          appBar: AppBar(
-            backgroundColor: Color(0xFF004AAD),
-            title: Text('Payment'),
-          ),
-          backgroundColor: Colors.grey[350],
-          body: FutureBuilder<Wallet>(
+      key: PaymentPage.scaffoldMessengerKey,
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Color(0xFF004AAD),
+          title: Text('Payment'),
+        ),
+        backgroundColor: Colors.grey[350],
+        body: SingleChildScrollView(
+          child: FutureBuilder<Wallet>(
             future: _walletInfo,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
@@ -162,12 +163,81 @@ class _PaymentPageState extends State<PaymentPage> {
                         ),
                       ),
                     ),
+                    SizedBox(height: 20),
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                        ),
+                        child: Column(
+                          children: [
+                            SizedBox(height: 50),
+                            GestureDetector(
+                              onTap: () {
+                                /*Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => SubmitAccessRequestPage()),
+                                );*/
+                              },
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "Reload Wallet Balance",
+                                    style: TextStyle(
+                                      color: Color(0xFF004AAD),
+                                      fontSize: 15, // Adjust the font size as needed
+                                    ),
+                                  ),
+                                  SizedBox(width: 10), // Add space between text and icon
+                                  Icon(
+                                    Icons.arrow_forward_ios, // Icon for navigating forward
+                                    color: Color(0xFF004AAD),
+                                    size: 15, // Adjust the icon size as needed
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 50),
+                            GestureDetector(
+                              onTap: () {
+                                /*Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => SubmitAccessRequestPage()),
+                                );*/
+                              },
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "View Transaction History",
+                                    style: TextStyle(
+                                      color: Color(0xFF004AAD),
+                                      fontSize: 15, // Adjust the font size as needed
+                                    ),
+                                  ),
+                                  SizedBox(width: 10), // Add space between text and icon
+                                  Icon(
+                                    Icons.arrow_forward_ios, // Icon for navigating forward
+                                    color: Color(0xFF004AAD),
+                                    size: 15, // Adjust the icon size as needed
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 50),
+                          ],
+                        ),
+                      ),
+                    ),
                   ],
                 );
               }
             },
           ),
-        )
+        ),
+      ),
     );
   }
 

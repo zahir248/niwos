@@ -78,7 +78,7 @@ class WalletController {
           // Display SnackBar indicating successful payment record submission
           PaymentPage.scaffoldMessengerKey.currentState?.showSnackBar(
             SnackBar(
-              content: Text("Payment recorded successfully"),
+              content: Text("Payment transaction successfully"),
               duration: Duration(seconds: 5),
               backgroundColor: Colors.green[900],
             ),
