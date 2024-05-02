@@ -3,6 +3,8 @@ import 'package:intl/intl.dart';
 
 import '/controllers/payment_page_controller.dart';
 import '/models/payment_page_model.dart';
+import '/views/reload_page.dart';
+import '/views/transaction_page.dart';
 
 class PaymentPage extends StatefulWidget {
 
@@ -174,11 +176,18 @@ class _PaymentPageState extends State<PaymentPage> {
                           children: [
                             SizedBox(height: 50),
                             GestureDetector(
-                              onTap: () {
-                                /*Navigator.push(
+                              onTap: () async {
+                                final result = await Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => SubmitAccessRequestPage()),
-                                );*/
+                                  MaterialPageRoute(
+                                    builder: (context) => ReloadPage(
+                                      scaffoldMessengerKey: PaymentPage.scaffoldMessengerKey,
+                                    ),
+                                  ),
+                                );
+                                if (result == 'refresh') {
+                                  refreshPage();
+                                }
                               },
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -199,13 +208,14 @@ class _PaymentPageState extends State<PaymentPage> {
                                 ],
                               ),
                             ),
+
                             SizedBox(height: 50),
                             GestureDetector(
                               onTap: () {
-                                /*Navigator.push(
+                                Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => SubmitAccessRequestPage()),
-                                );*/
+                                  MaterialPageRoute(builder: (context) => TransactionHistoryPage()),
+                                );
                               },
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
