@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
 }
 
 class AppConfig {
-  static final String baseIpAddress = "192.168.0.109";
+  static final String baseIpAddress = "10.200.74.242";
 
   static const String checkUsernamePath = '/niwos_api/check_username.php';
   static const String securityPicturePath = '/niwos_api/get_picture.php';
@@ -43,4 +43,5 @@ class AppConfig {
   static const String walletInformationPath = '/niwos_api/retrieve_wallet_information.php';
   static const String submitPaymentPath = '/niwos_api/submit_payment.php';
   static const String updateWalletBalancePath = '/niwos_api/update_wallet_balance.php';
+  static const String retrieveTransactionPath = '/niwos_api/retrieve_transaction.php';
 }
