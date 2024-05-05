@@ -226,7 +226,7 @@ class _SubmitAccessRequestPageState extends State<SubmitAccessRequestPage> {
                       color: Color(0xFF004AAD),
                     ),
                   ),
-                  child: Icon(Icons.calendar_today),
+                  child: Icon(Icons.calendar_month),
                 ),
               ],
             ),
