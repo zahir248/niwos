@@ -1,7 +1,7 @@
 import 'dart:typed_data'; // Import the typed_data library to use Uint8List
 
 class UserProfile {
-  final String fullName;
+  final String name;
   final String positionName;
   final String niwosID;
   final DateTime startDate;
@@ -12,7 +12,7 @@ class UserProfile {
   final Uint8List? profileImage; // Modify to accept Uint8List
 
   UserProfile({
-    required this.fullName,
+    required this.name,
     required this.positionName,
     required this.niwosID,
     required this.startDate,
@@ -25,11 +25,11 @@ class UserProfile {
 
   factory UserProfile.fromJson(Map<String, dynamic> json, Uint8List? profileImage) {
     return UserProfile(
-      fullName: json['FullName'],
+      name: json['name'],
       positionName: json['PositionName'],
       niwosID: json['Niwos_ID'],
       startDate: DateTime.parse(json['StartDate']),
-      email: json['Email'],
+      email: json['email'],
       dateOfBirth: DateTime.parse(json['DateOfBirth']),
       phoneNumber: json['PhoneNumber'],
       departmentName: json['DepartmentName'],

@@ -15,7 +15,7 @@ class DashboardPage extends StatefulWidget {
 
 class _DashboardPageState extends State<DashboardPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  User? _user; // Make _user nullable
+  Users? _user; // Make _user nullable
 
   @override
   void initState() {
@@ -25,7 +25,7 @@ class _DashboardPageState extends State<DashboardPage> {
 
   _loadUserData() async {
     try {
-      User user = await DashboardController.getUserDetailsFromSharedPreferences();
+      Users user = await DashboardController.getUserDetailsFromSharedPreferences();
       setState(() {
         _user = user;
       });
@@ -81,7 +81,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       height: 120, // Adjust the height of the logo image
                     ),
                     Text(
-                      _user?.fullName ?? '', // Display fullname
+                      _user?.name ?? '', // Display fullname
                       style: TextStyle(fontSize: 16),
                     ),
                     SizedBox(height: 20), // Add space between the name and the department
@@ -359,10 +359,10 @@ class _DashboardPageState extends State<DashboardPage> {
 
   Future<void> _getUserDetails(String username) async {
     try {
-      User? user = await DashboardController.getUserDetails(username);
+      Users? user = await DashboardController.getUserDetails(username);
       if (user != null) {
         // User data is not null, proceed with displaying the data
-        print('Fullname: ${user.fullName}, Department: ${user.department}');
+        print('Fullname: ${user.name}, Department: ${user.department}');
       } else {
         // User data is null, handle this case (e.g., show error message)
         print('User data is null');

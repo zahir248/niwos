@@ -37,7 +37,7 @@ class DashboardController {
     );
   }
 
-  static Future<User> getUserDetailsFromSharedPreferences() async {
+  static Future<Users> getUserDetailsFromSharedPreferences() async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? username = prefs.getString('username');
@@ -50,7 +50,7 @@ class DashboardController {
     }
   }
 
-  static Future<User> getUserDetails(String username) async {
+  static Future<Users> getUserDetails(String username) async {
     final response = await http.get(
       Uri.parse('http://${AppConfig.baseIpAddress}${AppConfig.getUserDataPath}?username=$username'),
     );
@@ -61,7 +61,7 @@ class DashboardController {
       final userData = json.decode(response.body);
       //print('Parsed user data: $userData');
 
-      return User.fromJson(userData);
+      return Users.fromJson(userData);
     } else {
       throw Exception('Failed to load user data');
     }

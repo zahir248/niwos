@@ -7,7 +7,6 @@ import '/views/reload_page.dart';
 import '/views/transaction_page.dart';
 
 class PaymentPage extends StatefulWidget {
-
   @override
   _PaymentPageState createState() => _PaymentPageState();
 
@@ -53,8 +52,11 @@ class _PaymentPageState extends State<PaymentPage> {
                 return Center(child: Text('Error: ${snapshot.error}'));
               } else {
                 final wallet = snapshot.data!;
-                DateTime lastTransactionDateTime = DateTime.parse(wallet.lastTransaction);
-                String formattedLastTransaction = DateFormat('EEEE, dd MMMM yyyy, HH:mm a').format(lastTransactionDateTime);
+                String formattedLastTransaction =
+                (wallet.lastTransaction.isNotEmpty)
+                    ? DateFormat('EEEE, dd MMMM yyyy, HH:mm a')
+                    .format(DateTime.parse(wallet.lastTransaction))
+                    : '-';
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
@@ -181,7 +183,8 @@ class _PaymentPageState extends State<PaymentPage> {
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => ReloadPage(
-                                      scaffoldMessengerKey: PaymentPage.scaffoldMessengerKey,
+                                      scaffoldMessengerKey: PaymentPage
+                                          .scaffoldMessengerKey,
                                     ),
                                   ),
                                 );
@@ -208,13 +211,14 @@ class _PaymentPageState extends State<PaymentPage> {
                                 ],
                               ),
                             ),
-
                             SizedBox(height: 50),
                             GestureDetector(
                               onTap: () {
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => TransactionHistoryPage()),
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          TransactionHistoryPage()),
                                 );
                               },
                               child: Row(
@@ -272,11 +276,13 @@ class _PaymentPageState extends State<PaymentPage> {
       tagDataList.add({'tagData': tagData});
 
       // Check if tag data matches the accepted format
-      if (tagData.substring(3) == ('Pymnt_@cc3ss#24!&Tz#Cafeteria')) {
+      if (tagData.substring(3) ==
+          ('Pymnt_@cc3ss#24!&Tz#Cafeteria')) {
         setState(() {
           location = 'Cafeteria';
         });
-      } else if (tagData.substring(3) == ('Pymnt_@cc3ss#24!&Tz#VendingMachine')) {
+      } else if (tagData.substring(3) ==
+          ('Pymnt_@cc3ss#24!&Tz#VendingMachine')) {
         setState(() {
           location = 'Vending Machine';
         });
@@ -310,10 +316,10 @@ class _PaymentPageState extends State<PaymentPage> {
                     padding: const EdgeInsets.only(top: 8.0),
                     child: TextButton(
                       onPressed: () {
-                        Navigator.pop(context); // Close the dialog
+                        Navigator.pop(
+                            context); // Close the dialog
                       },
-                      child:
-                      Text("Dismiss"), // Button to dismiss the dialog
+                      child: Text("Dismiss"), // Button to dismiss the dialog
                     ),
                   ),
                 ),
@@ -402,7 +408,8 @@ class _PaymentPageState extends State<PaymentPage> {
                         children: [
                           TextButton(
                             onPressed: () {
-                              Navigator.pop(context); // Close the dialog
+                              Navigator.pop(
+                                  context); // Close the dialog
                             },
                             child: Text(tagDataList.isEmpty
                                 ? "Try Again"
@@ -416,18 +423,21 @@ class _PaymentPageState extends State<PaymentPage> {
                                 data['tagData'].substring(3) ==
                                     ('Pymnt_@cc3ss#24!&Tz#VendingMachine'))
                                 ? () {
-                              Navigator.pop(context); // Close the dialog
+                              Navigator.pop(
+                                  context); // Close the dialog
                               double amount = double.tryParse(
-                                  _amountController.text) ?? 0;
+                                  _amountController.text) ??
+                                  0;
                               if (amount <= 0) {
                                 showDialog(
-                                  barrierDismissible: false, // Prevent dismissal by tapping outside
+                                  barrierDismissible:
+                                  false, // Prevent dismissal by tapping outside
                                   context: context,
                                   builder: (BuildContext context) {
                                     return AlertDialog(
                                       title: Text("Invalid!"),
-                                      content:
-                                      Text("Please enter a valid amount"),
+                                      content: Text(
+                                          "Please enter a valid amount"),
                                       actions: [
                                         TextButton(
                                           onPressed: () {

@@ -2,6 +2,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '/models/payment_page_model.dart';
 import '/views/payment_page.dart';
@@ -24,9 +25,14 @@ class WalletController {
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
+        String? lastTransactionString = data['lastTransaction'];
+        DateTime? lastTransaction;
+        if (lastTransactionString != null) {
+          lastTransaction = DateTime.parse(lastTransactionString);
+        }
         return Wallet(
           balance: data['balance'],
-          lastTransaction: data['lastTransaction'],
+          lastTransaction: lastTransaction != null ? DateFormat('yyyy-MM-dd HH:mm:ss').format(lastTransaction) : '', // Convert DateTime to String
         );
       } else {
         throw Exception('Failed to load wallet information');

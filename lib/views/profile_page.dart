@@ -111,7 +111,7 @@ class _ProfilePageState extends State<ProfilePage> {
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
             Text(
-              '${userProfile.fullName}',
+              '${userProfile.name}',
               style: TextStyle(fontSize: 16),
             ),
           ],
@@ -337,7 +337,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 children: [
                   Padding(
                     padding: EdgeInsets.only(left: 15.0),
-                    child: Text('${userProfile.fullName}', style: TextStyle(fontSize: 14)),
+                    child: Text('${userProfile.name}', style: TextStyle(fontSize: 14)),
                   ),
                   SizedBox(height: 5),
                   Padding(

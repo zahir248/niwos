@@ -29,9 +29,6 @@ class _ViewLeaveRequestHistoryPageState
         ? leaveData.where((leave) => leave['Status'] == selectedStatus).toList()
         : leaveData;
 
-    // Reverse the list to display the latest data at the top
-    filteredLeaveData = filteredLeaveData.reversed.toList();
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xFF004AAD),
@@ -66,10 +63,6 @@ class _ViewLeaveRequestHistoryPageState
           String submissionTimeDate = leave['SubmissionTimeDate'];
           String status = leave['Status'];
 
-          if (selectedStatus != 'All' && status != selectedStatus) {
-            return SizedBox.shrink(); // Hide item if not matching filter
-          }
-
           String type = leave['Type'];
 
           // Format the date and time
@@ -94,7 +87,8 @@ class _ViewLeaveRequestHistoryPageState
                     children: [
                       Text(
                         '$type',
-                        style: TextStyle(fontSize: 16,
+                        style: TextStyle(
+                          fontSize: 16,
                           fontWeight: FontWeight.bold,
                         ), // Adjust font size
                       ),
@@ -129,27 +123,31 @@ class _ViewLeaveRequestHistoryPageState
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(
-                        padding: EdgeInsets.only(bottom: 8), // Add padding to the bottom
+                        padding:
+                        EdgeInsets.only(bottom: 8), // Add padding to the bottom
                         child: Row(
                           children: [
                             Icon(Icons.calendar_today), // Date icon
                             SizedBox(width: 8),
                             Text(
                               formattedDate, // Formatted date
-                              style: TextStyle(fontSize: 13), // Adjust font size
+                              style:
+                              TextStyle(fontSize: 13), // Adjust font size
                             ),
                           ],
                         ),
                       ),
                       Container(
-                        padding: EdgeInsets.only(bottom: 8), // Add padding to the bottom
+                        padding:
+                        EdgeInsets.only(bottom: 8), // Add padding to the bottom
                         child: Row(
                           children: [
                             Icon(Icons.access_time), // Time icon
                             SizedBox(width: 8),
                             Text(
                               formattedTime, // Formatted time
-                              style: TextStyle(fontSize: 13), // Adjust font size
+                              style:
+                              TextStyle(fontSize: 13), // Adjust font size
                             ),
                           ],
                         ),
@@ -162,20 +160,22 @@ class _ViewLeaveRequestHistoryPageState
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => LeaveDetailsPage(leave: leave),
+                          builder: (context) =>
+                              LeaveDetailsPage(leave: leave),
                         ),
                       );
                     },
                     style: ButtonStyle(
                       minimumSize: MaterialStateProperty.all(
                           Size(double.infinity, 50)),
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      shape: MaterialStateProperty.all<
+                          RoundedRectangleBorder>(
                         RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),
                         ),
                       ),
-                      backgroundColor:
-                      MaterialStateProperty.all<Color>(Color(0xFF004AAD)), // Set background color
+                      backgroundColor: MaterialStateProperty.all<Color>(
+                          Color(0xFF004AAD)), // Set background color
                     ),
                     child: Text('Details'),
                   ),
@@ -194,6 +194,10 @@ class _ViewLeaveRequestHistoryPageState
       if (username != null && username.isNotEmpty) {
         final List<dynamic> data =
         await _controller.fetchLeaveData(username);
+
+        // Sort the leave data by SubmissionTimeDate in descending order
+        data.sort((a, b) => DateTime.parse(b['SubmissionTimeDate']).compareTo(DateTime.parse(a['SubmissionTimeDate'])));
+
         setState(() {
           leaveData = data;
         });
