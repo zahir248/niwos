@@ -1,7 +1,6 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 
-import '/models/security_picture_model.dart';
 import '/controllers/security_picture_controller.dart';
 
 class SecurityPicturePage extends StatefulWidget {
@@ -14,7 +13,7 @@ class SecurityPicturePage extends StatefulWidget {
 }
 
 class _SecurityPicturePageState extends State<SecurityPicturePage> {
-  final SecurityPictureController _controller = SecurityPictureController(); // Declaration of the controller
+  final SecurityPictureController _controller = SecurityPictureController();
 
   String getMaskedUsername(String username) {
     if (username.length <= 4) {
@@ -46,7 +45,7 @@ class _SecurityPicturePageState extends State<SecurityPicturePage> {
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
-                color: Colors.black, // Set text font color to black
+                color: Colors.black,
               ),
             ),
             SizedBox(height: 8),
@@ -55,75 +54,45 @@ class _SecurityPicturePageState extends State<SecurityPicturePage> {
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.normal,
-                color: Colors.black, // Set text font color to black
+                color: Colors.black,
               ),
             ),
             SizedBox(height: 50),
             FutureBuilder<Uint8List?>(
-              future: SecurityPictureModel.fetchSecurityPicture(widget.username),
+              future: _controller.fetchSecurityPicture(widget.username),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return CircularProgressIndicator();
-                } else if (snapshot.hasError) {
-                  return Text(
-                    'Error: ${snapshot.error}',
-                    style: TextStyle(color: Colors.black), // Set text font color to black
+                } else if (snapshot.hasError || !snapshot.hasData || snapshot.data == null) {
+                  return Column(
+                    children: [
+                      Image.asset(
+                        'assets/defaultSecurity.jpg', // Path to your default image asset
+                        width: 150,
+                        height: 150,
+                      ),
+                      SizedBox(height: 50),
+                      _buildButtons(context),
+                    ],
                   );
-                } else if (snapshot.hasData && snapshot.data != null) {
-                  // Display the decoded image using Image.memory widget
+                } else {
                   return Column(
                     children: [
                       Image.memory(
                         snapshot.data!,
                         width: 150,
                         height: 150,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Image.asset(
+                            'assets/defaultSecurity.jpg', // Path to your default image asset
+                            width: 150,
+                            height: 150,
+                          );
+                        },
                       ),
                       SizedBox(height: 50),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          ElevatedButton(
-                            onPressed: () {
-                              // Navigate back to the previous page (login_page)
-                              Navigator.pop(context);
-                            },
-                            style: ElevatedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              minimumSize: Size(150, 50), // Adjust the minimum width and height of the button
-                              backgroundColor: Color(0xFFD8EBFD), // Background color for "No" button
-                            ),
-                            child: Text(
-                              'No',
-                              style: TextStyle(color: Colors.black), // Set text font color to black
-                            ),
-                          ),
-                          SizedBox(width: 20),
-                          ElevatedButton(
-                            onPressed: () {
-                              _controller.navigateToLoginPasswordPage(context, widget.username);
-                            },
-                            style: ElevatedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              minimumSize: Size(150, 50), // Adjust the minimum width and height of the button
-                              backgroundColor: Color(0xFF004AAD), // Background color for "Yes" button
-                            ),
-                            child: Text(
-                              'Yes',
-                              style: TextStyle(color: Colors.white), // Set text font color to black
-                            ),
-                          ),
-                        ],
-                      ),
+                      _buildButtons(context),
                     ],
-                  );
-                } else {
-                  return Text(
-                    'No security picture found',
-                    style: TextStyle(color: Colors.black), // Set text font color to black
                   );
                 }
               },
@@ -132,6 +101,47 @@ class _SecurityPicturePageState extends State<SecurityPicturePage> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildButtons(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        ElevatedButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          style: ElevatedButton.styleFrom(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            minimumSize: Size(150, 50),
+            backgroundColor: Color(0xFFD8EBFD),
+          ),
+          child: Text(
+            'No',
+            style: TextStyle(color: Colors.black),
+          ),
+        ),
+        SizedBox(width: 20),
+        ElevatedButton(
+          onPressed: () {
+            _controller.navigateToLoginPasswordPage(context, widget.username);
+          },
+          style: ElevatedButton.styleFrom(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            minimumSize: Size(150, 50),
+            backgroundColor: Color(0xFF004AAD),
+          ),
+          child: Text(
+            'Yes',
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
+      ],
     );
   }
 }
