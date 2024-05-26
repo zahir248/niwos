@@ -7,6 +7,7 @@ import '/views/payment_page.dart';
 import '/views/profile_page.dart';
 import '/controllers/dashboard_controller.dart';
 import '/models/user_model.dart';
+import '/views/feedback_page.dart';
 
 class DashboardPage extends StatefulWidget {
   @override
@@ -266,6 +267,10 @@ class _DashboardPageState extends State<DashboardPage> {
                           SizedBox(width: 20),
                           InkWell(
                             onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => FeedbackPage()),
+                              );
                             },
                             child: Column(
                               children: [
