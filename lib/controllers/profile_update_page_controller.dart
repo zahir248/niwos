@@ -109,4 +109,43 @@ class ProfileController {
       return false;
     }
   }
+
+  Future<bool> updateUsername(String newUsername) async {
+    String? currentUsername = await getUsername();
+    if (currentUsername == null || currentUsername.isEmpty) {
+      return false;
+    }
+
+    Map<String, String> requestBody = {
+      'current_username': currentUsername,
+      'new_username': newUsername,
+    };
+
+    String updateUrl = 'http://${AppConfig.baseIpAddress}${AppConfig.updateUsernamePath}';
+
+    try {
+      http.Response response = await http.post(
+        Uri.parse(updateUrl),
+        body: requestBody,
+      );
+
+      if (response.statusCode == 200) {
+        final responseBody = jsonDecode(response.body);
+        if (responseBody['status'] == 'success') {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          await prefs.setString('username', newUsername);
+          return true;
+        } else {
+          print('Failed to update username: ${responseBody['message']}');
+          return false;
+        }
+      } else {
+        print('Failed to update username: ${response.body}');
+        return false;
+      }
+    } catch (e) {
+      print('Exception occurred while updating username: $e');
+      return false;
+    }
+  }
 }

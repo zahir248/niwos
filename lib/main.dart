@@ -45,4 +45,5 @@ class AppConfig {
   static const String updateWalletBalancePath = '/niwos_api/update_wallet_balance.php';
   static const String retrieveTransactionPath = '/niwos_api/retrieve_transaction.php';
   static const String uploadSecurityImagePath = '/niwos_api/upload_security_image.php';
+  static const String updateUsernamePath = '/niwos_api/update_username.php';
 }
