@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '/views/profile_update_page.dart';
+import '/views/change_password_page.dart';
 
 class SettingPage extends StatelessWidget {
   @override
@@ -47,8 +48,11 @@ class SettingPage extends StatelessWidget {
                 width: 350, // Adjust the width as needed
                 child: ElevatedButton(
                   onPressed: () {
-                    // Add functionality for changing password
-                  },
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ChangePasswordPage()),
+                    );
+                    },
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
