@@ -158,7 +158,7 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
                   borderRadius: BorderRadius.circular(8),
                 ),
                 padding: const EdgeInsets.symmetric(
-                    vertical: 15, horizontal: 32),
+                    vertical: 15, horizontal: 142),
                 backgroundColor: Color(0xFF004AAD),
               ),
               child: Text('Upload', style: TextStyle(fontSize: 15)),
@@ -227,7 +227,7 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
                   borderRadius: BorderRadius.circular(8),
                 ),
                 padding: const EdgeInsets.symmetric(
-                    vertical: 15, horizontal: 32),
+                    vertical: 15, horizontal: 142),
                 backgroundColor: Color(0xFF004AAD),
               ),
               child: Text('Update', style: TextStyle(fontSize: 15)),

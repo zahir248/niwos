@@ -8,6 +8,8 @@ import '/views/profile_page.dart';
 import '/controllers/dashboard_controller.dart';
 import '/models/user_model.dart';
 import '/views/feedback_page.dart';
+import '/views/faq_page.dart';
+import '/views/notification_page.dart';
 
 class DashboardPage extends StatefulWidget {
   @override
@@ -237,6 +239,10 @@ class _DashboardPageState extends State<DashboardPage> {
                         children: [
                           InkWell(
                             onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => FAQPage()),
+                              );
                             },
                             child: Column(
                               children: [
@@ -252,6 +258,10 @@ class _DashboardPageState extends State<DashboardPage> {
                           SizedBox(width: 15),
                           InkWell(
                             onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => NotificationPage()),
+                              );
                             },
                             child: Column(
                               children: [
