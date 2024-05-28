@@ -34,7 +34,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Color(0xFF004AAD),
-          title: Text('Feedback Form'),
+          title: Text('Feedback'),
         ),
         backgroundColor: Colors.grey[350],
         body: SingleChildScrollView(
