@@ -49,4 +49,6 @@ class AppConfig {
   static const String changePasswordPath = '/niwos_api/change_password.php';
   static const String submitFeedbackPath = '/niwos_api/submit_feedback.php';
   static const String retrieveNotificationsPath = '/niwos_api/retrieve_notifications.php';
+  static const String retrieveUsernamePath = '/niwos_api/retrieve_username.php';
+  static const String resetPasswordPath = '/niwos_api/reset_password.php';
 }

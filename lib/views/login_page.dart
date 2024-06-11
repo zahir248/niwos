@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../controllers/login_page_controller.dart';
+import '../views/forgot_login_details_page.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key? key}) : super(key: key);
@@ -138,6 +139,23 @@ class _LoginPageState extends State<LoginPage> {
                       'Login',
                       style: TextStyle(fontSize: 15),
                     ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
+              TextButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ForgotLoginDetailsPage()),
+                  );
+                  },
+                child: const Text(
+                  'Forgot Login Details',
+                  style: TextStyle(
+                    fontSize: 15,
+                    color: Colors.black,
+                    decoration: TextDecoration.underline,
                   ),
                 ),
               ),
