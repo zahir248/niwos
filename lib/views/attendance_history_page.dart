@@ -25,8 +25,7 @@ class _AttendanceHistoryPageState extends State<AttendanceHistoryPage> {
     List<dynamic> filteredAttendanceData = selectedDate != null
         ? attendanceData.where((attendance) =>
     attendance['AttendanceDate'] ==
-        DateFormat('EEEE, d MMMM yyyy').format(selectedDate!))
-        .toList()
+        DateFormat('EEEE, d MMMM yyyy').format(selectedDate!)).toList()
         : attendanceData;
 
     // Create a map to hold attendance data grouped by date
@@ -74,13 +73,16 @@ class _AttendanceHistoryPageState extends State<AttendanceHistoryPage> {
                   DataColumn(label: Text('Status')),
                 ],
                 rows: attendanceRecords.map<DataRow>((attendance) {
+                  String? punchInTime = attendance['PunchInTime'];
+                  String? punchOutTime = attendance['PunchOutTime'];
+
                   return DataRow(
                     cells: [
                       DataCell(Text('${attendance['Session']}')),
                       DataCell(Text(
                           attendance['Session'] == 'In'
-                              ? '${convertTo12HourFormat(attendance['PunchInTime']!)}'
-                              : '${convertTo12HourFormat(attendance['PunchOutTime']!)}'
+                              ? (punchInTime != null ? convertTo12HourFormat(punchInTime) : 'N/A')
+                              : (punchOutTime != null ? convertTo12HourFormat(punchOutTime) : 'N/A')
                       )),
                       DataCell(
                         Container(
@@ -216,6 +218,8 @@ class _AttendanceHistoryPageState extends State<AttendanceHistoryPage> {
         return Colors.green.shade900;
       case 'too early':
         return Colors.yellow.shade900;
+      case 'on leave':
+        return Colors.blueGrey;
       default:
         return Colors.grey.shade900;
     }
