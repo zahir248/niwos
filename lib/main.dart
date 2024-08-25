@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
 }
 
 class AppConfig {
-  static final String baseIpAddress = "10.200.69.172";
+  static final String baseIpAddress = "192.168.0.110";
 
   static const String checkUsernamePath = '/niwos_api/check_username.php';
   static const String securityPicturePath = '/niwos_api/get_picture.php';
@@ -51,4 +51,5 @@ class AppConfig {
   static const String retrieveNotificationsPath = '/niwos_api/retrieve_notifications.php';
   static const String retrieveUsernamePath = '/niwos_api/retrieve_username.php';
   static const String resetPasswordPath = '/niwos_api/reset_password.php';
+  static const String submitAttendanceQRPath = '/niwos_api/submit_attendance_qr.php';
 }
